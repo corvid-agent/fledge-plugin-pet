@@ -1,8 +1,8 @@
 # fledge-plugin-pet
 
-A [fledge](https://github.com/CorvidLabs/fledge) plugin that gives you a corvid companion. Feed it with good dev habits and watch it grow.
+A [fledge](https://github.com/CorvidLabs/fledge) plugin that gives you an ASCII corvid companion powered by [corvid-pet](https://github.com/CorvidLabs/corvid-pet).
 
-Built as a shell script — no compilation needed.
+Your pet reacts to dev activity — feed it commits, test runs, code reviews, and deploys. It has moods, life stages, hunger, energy, and happiness stats.
 
 ## Install
 
@@ -10,40 +10,34 @@ Built as a shell script — no compilation needed.
 fledge plugin install corvid-agent/fledge-plugin-pet
 ```
 
+Requires Rust toolchain (`cargo`) — the plugin auto-builds on install via the `build` hook.
+
 ## Usage
 
 ```bash
 # Check on your pet
 fledge pet
 
-# Feed it with dev activities
-fledge pet feed commit     # +10 XP
-fledge pet feed test       # +5 XP
-fledge pet feed review     # +15 XP
+# Feed with dev activity
+fledge pet feed commit
+fledge pet feed test
+fledge pet feed review
+fledge pet feed lint
+fledge pet feed deploy
+
+# Play with your pet
+fledge pet play
 
 # Rename your corvid
 fledge pet rename Raven
 
-# Reset (new egg)
+# Start fresh
 fledge pet reset
 ```
 
-## Evolution
-
-Your corvid evolves as it levels up:
-
-| Level | Stage | Art |
-|-------|-------|-----|
-| 1 | Hatchling | Tiny chick |
-| 2-4 | Fledgling | Young bird |
-| 5-9 | Corvid | Full-grown crow |
-| 10+ | Elder Corvid | Majestic elder |
-
 ## How It Works
 
-Your pet gains XP when you feed it. Every level requires `level * 50` XP. State is stored in `~/.local/state/fledge-pet/pet.json`.
-
-The mood system reacts to how often you interact — leave it too long and it gets lonely!
+Uses [corvid-pet](https://crates.io/crates/corvid-pet)'s simulation system — your pet has hunger, energy, happiness, and health stats that decay over time. Dev activity feeds it and keeps it healthy. Neglect it and it gets sad.
 
 ## Integration Ideas
 
@@ -66,7 +60,7 @@ fledge pet feed commit
 
 ## Requirements
 
-- bash, python3 (for JSON state management)
+- Rust toolchain (cargo) — builds automatically on `fledge plugin install`
 
 ## License
 

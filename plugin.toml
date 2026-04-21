@@ -1,10 +1,13 @@
 [plugin]
 name = "fledge-plugin-pet"
-version = "0.1.0"
-description = "A corvid companion that tracks your dev habits and reacts to your workflow"
+version = "0.2.0"
+description = "Corvid dev companion — powered by CorvidLabs/corvid-pet"
 author = "CorvidLabs"
 
 [[commands]]
 name = "pet"
-description = "Check on your corvid pet — feed it with good dev habits"
-binary = "bin/fledge-pet"
+description = "Check on your corvid pet — feed it with dev activity"
+binary = "target/release/fledge-pet"
+
+[hooks]
+build = "cargo build --release"

@@ -1,0 +1,14 @@
+[package]
+name = "fledge-plugin-pet"
+version = "0.2.0"
+edition = "2021"
+description = "Fledge plugin: corvid companion powered by corvid-pet"
+license = "MIT"
+
+[[bin]]
+name = "fledge-pet"
+path = "src/main.rs"
+
+[dependencies]
+corvid-pet = { version = "1", features = ["cli", "color", "persistence"] }
+clap = { version = "4", features = ["derive"] }
