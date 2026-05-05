@@ -5,7 +5,7 @@ description = "Corvid dev companion — powered by CorvidLabs/corvid-pet"
 author = "corvid-agent"
 
 [[commands]]
-name = "fledge-plugin-pet"
+name = "pet"
 description = "Check on your corvid pet — feed it with dev activity"
 binary = "target/release/fledge-pet"
 
