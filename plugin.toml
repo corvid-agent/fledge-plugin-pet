@@ -1,8 +1,8 @@
 [plugin]
-name = "fledge-plugin-pet"
+name = "pet"
 version = "0.2.0"
 description = "Corvid dev companion — powered by CorvidLabs/corvid-pet"
-author = "CorvidLabs"
+author = "corvid-agent"
 
 [[commands]]
 name = "pet"

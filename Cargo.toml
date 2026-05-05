@@ -10,5 +10,5 @@ name = "fledge-pet"
 path = "src/main.rs"
 
 [dependencies]
-corvid-pet = { version = "1", features = ["cli", "color", "persistence"] }
+corvid-pet = { git = "https://github.com/CorvidLabs/corvid-pet.git", features = ["cli", "color", "persistence"] }
 clap = { version = "4", features = ["derive"] }
