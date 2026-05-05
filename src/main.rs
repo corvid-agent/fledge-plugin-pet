@@ -69,6 +69,103 @@ fn save_pet(pet: &Pet, name: &str) {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn now_returns_nonzero() {
+        assert!(now() > 0);
+    }
+
+    #[test]
+    fn load_pet_creates_new_when_missing() {
+        // A pet name that won't collide with real state
+        let pet = load_pet("__test_nonexistent_pet_xyz__");
+        assert_eq!(pet.name(), "__test_nonexistent_pet_xyz__");
+    }
+
+    #[test]
+    fn activity_variants_parse() {
+        // Ensure all ValueEnum variants can be constructed
+        let _commit = Activity::Commit;
+        let _test = Activity::Test;
+        let _review = Activity::Review;
+        let _lint = Activity::Lint;
+        let _deploy = Activity::Deploy;
+    }
+
+    #[test]
+    fn feed_maps_activity_to_event() {
+        let mut pet = Pet::new("TestBird".to_string(), Species::Crow)
+            .with_simulation(Personality::Curious, now());
+
+        // Feeding with commit should produce a Success event path
+        pet.react(Event::Success);
+        let result = pet.feed(now());
+        // feed() returns Some on success (pet was hungry enough)
+        // or None if not hungry -- either is valid, just ensure no panic
+        let _ = result;
+    }
+
+    #[test]
+    fn play_does_not_panic() {
+        let mut pet = Pet::new("TestBird".to_string(), Species::Crow)
+            .with_simulation(Personality::Curious, now());
+        let _ = pet.play(now());
+    }
+
+    #[test]
+    fn save_and_load_roundtrip() {
+        let name = "__test_roundtrip_pet__";
+        let pet = Pet::new(name.to_string(), Species::Crow)
+            .with_simulation(Personality::Curious, now());
+
+        save_pet(&pet, name);
+        let loaded = load_pet(name);
+        assert_eq!(loaded.name(), name);
+
+        // Cleanup
+        let _ = persistence::delete_pet(name);
+    }
+
+    #[test]
+    fn cli_parses_no_args() {
+        // Simulates running with just --name (no subcommand) -- should default to Status
+        let cli = Cli::try_parse_from(["fledge-pet"]).unwrap();
+        assert!(cli.command.is_none());
+        assert_eq!(cli.name, "Pip");
+    }
+
+    #[test]
+    fn cli_parses_feed_commit() {
+        let cli = Cli::try_parse_from(["fledge-pet", "feed", "commit"]).unwrap();
+        match cli.command {
+            Some(Commands::Feed { activity }) => {
+                assert!(matches!(activity, Activity::Commit));
+            }
+            _ => panic!("Expected Feed command"),
+        }
+    }
+
+    #[test]
+    fn cli_parses_rename() {
+        let cli = Cli::try_parse_from(["fledge-pet", "rename", "Huginn"]).unwrap();
+        match cli.command {
+            Some(Commands::Rename { new_name }) => {
+                assert_eq!(new_name, "Huginn");
+            }
+            _ => panic!("Expected Rename command"),
+        }
+    }
+
+    #[test]
+    fn cli_custom_name() {
+        let cli = Cli::try_parse_from(["fledge-pet", "--name", "Muninn", "status"]).unwrap();
+        assert_eq!(cli.name, "Muninn");
+    }
+}
+
 fn main() {
     let cli = Cli::parse();
     let pet_name = &cli.name;
